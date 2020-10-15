@@ -6,6 +6,7 @@ class TasksController < ApplicationController
   end
 
   def show
+    set_task
   end
   
   def new
@@ -25,11 +26,10 @@ class TasksController < ApplicationController
   end
 
   def edit
-    @task = Task.find(params[:id])
+    set_task
   end
-
-
-def update
+  
+  def update
     if @task.update(task_params)
       flash[:success] = 'Task は正常に更新されました'
       redirect_to @task
@@ -37,15 +37,15 @@ def update
       flash.now[:danger] = 'Task は更新されませんでした'
       render :edit
     end
-end
+  end
 
-def destroy
+  def destroy
+    set_task
     @task.destroy
 
     flash[:success] = 'Task は正常に削除されました'
     redirect_to tasks_url
-end
-
+  end
 
   private
 
@@ -55,6 +55,6 @@ end
 
   # Strong Parameter
   def task_params
-    params.require(:task).permit(:content)
+    params.require(:task).permit(:content, :status)
   end
 end
